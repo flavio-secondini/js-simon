@@ -2,20 +2,47 @@
 $(document).ready(function () {
   randomNumbers(5, 1000)
   setTimeout(function () {
-    alert("ok")
+    $("#numeri-generati").hide()
+    $("#linea-1").hide()
+    // dopo averli nascosti, inizio il countdown di 30 secondi
+    var timer = 3
+    var countdown = setInterval(function () {
+      $("#countdown").html(timer)
+      timer--
+      if (timer === -1) {
+        clearInterval(countdown)
+        $("#linea-2").hide()
+        // chiedo di inserire i 5 numeri
+        questions()
+      }
+    }, 1000)
   }, 5000)
 })
 
-
-// dopo 30 secondi chiedo di inserire i 5 numeri
-// stampo quanti e quali numeri sono stati indovinati
-
+var numeriRandom = []
+var numeriRandomLista = []
+var risposteEsatte = []
 
 // FUNZIONI
+
 function randomNumbers(quantity, max) {
-  var numeriRandom = []
   for (var i = 0; i < quantity; i++) {
-    numeriRandom.push('<li>' + (Math.floor(Math.random() * max) + 1) + '</li>')
+    numeriRandom.push(+ (Math.floor(Math.random() * max) + 1))
   }
-  $("#numeri-generati").html(numeriRandom)
+  for (var i = 0; i < numeriRandom.length; i++) {
+    numeriRandomLista.push("<li>" + numeriRandom[i] + "</li>")
+  }
+  $("#numeri-generati").html(numeriRandomLista)
+  console.log(numeriRandom);
+}
+
+function questions() {
+  for (var i = 0; i < 5; i++) {
+    var risposta = parseInt(prompt("inserisci uno dei numeri"))
+    if (numeriRandom.includes(risposta)) {
+      risposteEsatte.push(risposta)
+    }
+  }
+  $("#numeri-generati").show()
+  alert("Hai indovinato i numeri: " + risposteEsatte + " per un totale di " + risposteEsatte.length + " risposte esatte.")
 }
